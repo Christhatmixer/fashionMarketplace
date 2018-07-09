@@ -73,7 +73,7 @@ def updatePost():
     try:
         with connection.cursor() as cursor:
             sql = "UPDATE 'post' SET {key} = '{value}' WHERE clothingID = '{clothingID}'".format(key=data["key"], value=data["value"],clothingID=data["clothingID"])
-            cursor.execute(sql, (data["key"], data["value"],data["clothingID"]))
+            cursor.execute(sql)
 
             connection.commit()
     finally:
