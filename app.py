@@ -18,6 +18,26 @@ def getFeedPost():
     data = request.json
     return 'Hello, World!'
 
+@app.route('/getUserPost', methods=['GET', 'POST'])
+def getUserPost():
+    data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM post WHERE userID = '{userID}'".format(userID=data["userID"])
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            print(result)
+
+            connection.commit()
+    finally:
+        connection.close()
+    return result
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
     connection = pymysql.connect(host='adnap.co',
