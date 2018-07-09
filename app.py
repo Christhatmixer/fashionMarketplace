@@ -31,7 +31,8 @@ def getUserPost():
         with connection.cursor() as cursor:
             sql = "SELECT * FROM post WHERE userID = '{userID}'".format(userID=data["userID"])
             cursor.execute(sql)
-            result = cursor.fetchone()
+
+            result = cursor.fetchall()
             print(result)
 
             connection.commit()
