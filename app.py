@@ -37,7 +37,7 @@ def getUserPost():
             connection.commit()
     finally:
         connection.close()
-    return result
+    return jsonify(result)
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
     connection = pymysql.connect(host='adnap.co',
