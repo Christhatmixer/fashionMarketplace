@@ -6,14 +6,8 @@ import json
 import requests
 
 
-connection = pymysql.connect(host='adnap.co',
-                             user='cfarley9_Admin',
-                             password='Heero4501',
-                             db='cfarley9_fashion',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
-print(connection)
+
 
 
 
@@ -26,6 +20,13 @@ def getFeedPost():
 
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+
     data = request.json
     try:
         with connection.cursor() as cursor:
@@ -40,6 +41,13 @@ def registerUser():
 
 @app.route('/newPost', methods=['GET', 'POST'])
 def newPost():
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+
     data = request.json
     try:
         with connection.cursor() as cursor:
@@ -55,6 +63,13 @@ def newPost():
 @app.route('/updatePost', methods=['GET', 'POST'])
 def updatePost():
     data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+
     try:
         with connection.cursor() as cursor:
             sql = "UPDATE 'post' SET '%s' = '%s' WHERE 'clothingID' = %s"
