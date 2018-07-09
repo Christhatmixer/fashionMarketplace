@@ -51,7 +51,7 @@ def newPost():
     data = request.json
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO 'post' ('name', 'description', 'category','userID') VALUES (%s,%s,%s,%s,%s)" % (data["name"], data["description"],data["category"],data["userID"],data["clothingID"])
+            sql = "INSERT INTO 'post' (name, description, category,userID) VALUES (%s,%s,%s,%s,%s)" % (data["name"], data["description"],data["category"],data["userID"],data["clothingID"])
             cursor.execute(sql)
 
             connection.commit()
