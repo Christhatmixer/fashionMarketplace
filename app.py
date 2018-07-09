@@ -58,3 +58,17 @@ def newPost():
         connection.close()
 
     return "success"
+
+@app.route('/updatePost', methods=['GET', 'POST'])
+def updatePost():
+    data = request.json
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE 'post' SET '%s' = '%s' WHERE 'clothingID' = %s"
+            cursor.execute(sql, (data["key"], data["value"],data["clothingID"]))
+
+            connection.commit()
+    finally:
+        connection.close()
+
+    return "success"
