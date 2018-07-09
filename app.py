@@ -14,14 +14,7 @@ connection = pymysql.connect(host='adnap.co',
                              cursorclass=pymysql.cursors.DictCursor)
 
 print(connection)
-try:
-    with connection.cursor() as cursor:
-        sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"
-        cursor.execute(sql)
-        result = cursor.fetchone()
-        print(result)
-finally:
-    connection.close()
+
 
 
 app = Flask(__name__)
@@ -72,3 +65,6 @@ def updatePost():
         connection.close()
 
     return "success"
+
+if __name__ == '__main__':
+    app.run()
