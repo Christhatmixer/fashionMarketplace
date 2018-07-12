@@ -12,10 +12,27 @@ import requests
 
 
 app = Flask(__name__)
-
+# RETRIEVE POST
 @app.route('/getFeedPost', methods=['GET', 'POST'])
 def getFeedPost():
     data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM post, followings WHERE userID = '{userID}'".format(userID=data["userID"])
+            cursor.execute(sql)
+
+            result = cursor.fetchall()
+            print(result)
+
+            connection.commit()
+    finally:
+        connection.close()
     return 'Hello, World!'
 
 @app.route('/getUserPost', methods=['GET', 'POST'])
@@ -51,7 +68,7 @@ def registerUser():
     data = request.json
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO 'users' ('userID', 'email', 'name','profileImageURL') VALUES (%s,%s)"
+            sql = "INSERT INTO 'users' ('userID', 'email', 'name','profileImageURL') VALUES (%s,%s,%s,%s)"
             cursor.execute(sql, (data["userID"], data["email"],data["name"],data["profileImageURL"]))
 
             connection.commit()
@@ -59,6 +76,9 @@ def registerUser():
         connection.close()
 
     return "success"
+
+
+#EDIT AND ADD POST
 
 @app.route('/newPost', methods=['GET', 'POST'])
 def newPost():
@@ -103,6 +123,30 @@ def updatePost():
         connection.close()
 
     return "success"
+
+
+# SEARCHING
+@app.route('/searchUsers', methods=['GET', 'POST'])
+def searchUsers():
+    data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT userName FROM users WHERE userName LIKE {query} LIMIT 10".format(query=data["query"])
+            print(sql)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            print(result)
+            connection.commit()
+    finally:
+        connection.close()
+    return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run()
