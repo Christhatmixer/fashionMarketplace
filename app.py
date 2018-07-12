@@ -68,7 +68,7 @@ def registerUser():
     data = request.json
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO users (userID, email, name,profileImageURL) VALUES (%s,%s,%s,%s)"
+            sql = "INSERT INTO users (userID, email, name,username,profileImageURL) VALUES (%s,%s,%s,%s,%s)"
             cursor.execute(sql, (data["userID"], data["email"],data["name"],data["profileImageURL"]))
 
             connection.commit()
