@@ -137,7 +137,7 @@ def searchUsers():
                                  cursorclass=pymysql.cursors.DictCursor)
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM users WHERE userName LIKE {query} LIMIT 10".format(query=data["query"])
+            sql = "SELECT * FROM users WHERE userName LIKE '{query}%' LIMIT 10".format(query=data["query"])
             print(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
