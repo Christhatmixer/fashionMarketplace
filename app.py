@@ -148,5 +148,27 @@ def searchUsers():
     return jsonify(result)
 
 
+
+# RELATIONSHOP MANAGEMENT
+@app.route('/followUser', methods=['GET', 'POST'])
+def followUser():
+    data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO followings (userID, followingID, dateCreated) VALUES ('{userID}','{followingID}')".format(userID=data["userID"], followingID=data["followingID"])
+            print(sql)
+            cursor.execute(sql)
+
+            connection.commit()
+    finally:
+        connection.close()
+    return "success"
+
 if __name__ == '__main__':
     app.run()
