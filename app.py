@@ -170,5 +170,26 @@ def followUser():
         connection.close()
     return "success"
 
+@app.route('/unfollowUser', methods=['GET', 'POST'])
+def unfollowUser():
+    data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "DELETE FROM followings WHERE userID = '{userID}' AND followingID = '{followingID}'".format(userID=data["userID"], followingID=data["followingID"])
+            print(sql)
+            cursor.execute(sql)
+
+            connection.commit()
+    finally:
+        connection.close()
+    return "success"
+
 if __name__ == '__main__':
     app.run()
