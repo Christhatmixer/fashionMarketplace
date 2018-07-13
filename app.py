@@ -78,7 +78,7 @@ def registerUser():
     return "success"
 
 
-#EDIT AND ADD POST
+# EDIT AND ADD POST
 
 @app.route('/newPost', methods=['GET', 'POST'])
 def newPost():
