@@ -150,6 +150,30 @@ def searchUsers():
 
 
 # RELATIONSHOP MANAGEMENT
+@app.route('/checkFollow', methods=['GET', 'POST'])
+def checkFollow():
+    data = request.json
+    connection = pymysql.connect(host='adnap.co',
+                                 user='cfarley9_Admin',
+                                 password='Heero4501',
+                                 db='cfarley9_fashion',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            sql = "select 1 FROM followings WHERE userID = '{userID}' AND followingID = '{otherUserID}'".format(
+                userID=data["userID"], otherUserID=data["otherUserID"])
+            print(sql)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            print(result)
+            connection.commit()
+    finally:
+        connection.close()
+    return "success"
+
+
+
 @app.route('/followUser', methods=['GET', 'POST'])
 def followUser():
     data = request.json
