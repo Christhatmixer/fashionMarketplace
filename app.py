@@ -161,7 +161,7 @@ def followUser():
                                  cursorclass=pymysql.cursors.DictCursor)
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO followings (userID, followingID, dateCreated) VALUES ('{userID}','{followingID}')".format(userID=data["userID"], followingID=data["followingID"])
+            sql = "INSERT INTO followings (userID, followingID) VALUES ('{userID}','{followingID}')".format(userID=data["userID"], followingID=data["followingID"])
             print(sql)
             cursor.execute(sql)
 
