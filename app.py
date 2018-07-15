@@ -170,7 +170,7 @@ def checkFollow():
             connection.commit()
     finally:
         connection.close()
-    return result
+    return jsonify(result)
 
 
 
