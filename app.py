@@ -13,7 +13,7 @@ import requests
 
 app = Flask(__name__)
 # RETRIEVE POST
-@app.route('/getFeedPost', methods=['GET', 'POST'])
+@app.route('/getFeed', methods=['GET', 'POST'])
 def getFeedPost():
     data = request.json
     connection = pymysql.connect(host='adnap.co',
@@ -24,7 +24,8 @@ def getFeedPost():
                                  cursorclass=pymysql.cursors.DictCursor)
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM post, followings WHERE userID = '{userID}'".format(userID=data["userID"])
+            sql = "SELECT * FROM post INNER JOIN followings ON post.userID = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
+
             cursor.execute(sql)
 
             result = cursor.fetchall()
@@ -33,7 +34,7 @@ def getFeedPost():
             connection.commit()
     finally:
         connection.close()
-    return 'Hello, World!'
+    return jsonify(result)
 
 @app.route('/getUserPost', methods=['GET', 'POST'])
 def getUserPost():
