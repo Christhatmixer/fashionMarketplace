@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import pymysql.cursors
-import pymysql
+import pymysql-
 import psycopg2
 import sys
 import json
