@@ -24,7 +24,7 @@ def getFeedPost():
     connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM post INNER JOIN followings ON post.userID = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
+            sql = "SELECT * FROM post INNER JOIN followings ON 'post.userID' = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
 
 
             cursor.execute(sql)
@@ -62,7 +62,7 @@ def registerUser():
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO users (userID, email, name,username,profileImageURL) VALUES (%s,%s,%s,%s,%s)"
-            cursor.execute(sql, (data["userID"], data["email"],data["name"],data["profileImageURL"]))
+            cursor.execute(sql, (data["userID"], data["email"],data["name"],data["username"],data["profileImageURL"]))
 
             connection.commit()
     finally:
