@@ -13,16 +13,13 @@ import requests
 
 
 app = Flask(__name__)
+app.config['DATABASE_URL'] = 'postgres://nkcduumnfgmusu:52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed@ec2-107-22-241-243.compute-1.amazonaws.com:5432/dd8bd5826e14te'
 # RETRIEVE POST
 @app.route('/getFeed', methods=['GET', 'POST'])
 def getFeedPost():
     data = request.json
 
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM post INNER JOIN followings ON post.userID = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
@@ -41,11 +38,7 @@ def getFeedPost():
 @app.route('/getUserPost', methods=['GET', 'POST'])
 def getUserPost():
     data = request.json
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM post WHERE userID = '{userID}'".format(userID=data["userID"])
@@ -58,13 +51,10 @@ def getUserPost():
     finally:
         connection.close()
     return jsonify(result)
+
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     data = request.json
     try:
@@ -78,16 +68,30 @@ def registerUser():
 
     return "success"
 
+@app.route('/getUserInfo', methods=['GET', 'POST'])
+def registerUser():
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
+
+    data = request.json
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT 1 FROM users WHERE userID = %s"
+            cursor.execute(sql, (data["userID"]))
+            result = cursor.fetchall()
+            print(result)
+
+            connection.commit()
+    finally:
+        connection.close()
+
+    return jsonify(result)
+
 
 # EDIT AND ADD POST
 
 @app.route('/newPost', methods=['GET', 'POST'])
 def newPost():
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     data = request.json
     try:
@@ -105,11 +109,7 @@ def newPost():
 @app.route('/updatePost', methods=['GET', 'POST'])
 def updatePost():
     data = request.json
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     try:
         with connection.cursor() as cursor:
@@ -128,11 +128,7 @@ def updatePost():
 @app.route('/searchUsers', methods=['GET', 'POST'])
 def searchUsers():
     data = request.json
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM users WHERE userName LIKE '{query}%' LIMIT 10".format(query=data["query"])
@@ -151,11 +147,7 @@ def searchUsers():
 @app.route('/checkFollow', methods=['GET', 'POST'])
 def checkFollow():
     data = request.json
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "select 1 FROM followings WHERE userID = '{userID}' AND followingID = '{otherUserID}'".format(
@@ -174,11 +166,7 @@ def checkFollow():
 @app.route('/followUser', methods=['GET', 'POST'])
 def followUser():
     data = request.json
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO followings (userID, followingID) VALUES ('{userID}','{followingID}')".format(userID=data["userID"], followingID=data["followingID"])
@@ -194,11 +182,7 @@ def followUser():
 def unfollowUser():
     data = request.json
 
-    connection = psycopg2.connect(dbname="dd8bd5826e14te",
-                                  user="nkcduumnfgmusu",
-                                  password="52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed",
-                                  host="ec2-107-22-241-243.compute-1.amazonaws.com",
-                                  port=5432)
+    connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
         with connection.cursor() as cursor:
             sql = "DELETE FROM followings WHERE userID = '{userID}' AND followingID = '{followingID}'".format(userID=data["userID"], followingID=data["followingID"])
