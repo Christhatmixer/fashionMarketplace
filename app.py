@@ -5,7 +5,8 @@ import psycopg2
 import sys
 import json
 import requests
-
+from urllib.parse import urlparse
+import os
 
 
 
@@ -13,7 +14,8 @@ import requests
 
 
 app = Flask(__name__)
-app.config['DATABASE_URL'] = 'postgres://nkcduumnfgmusu:52e2880c35d54c891761734df7d4217d15eeca4016f992550f6641fb510524ed@ec2-107-22-241-243.compute-1.amazonaws.com:5432/dd8bd5826e14te'
+app.config['DATABASE_URL'] = os.environ['DATABASE_URL']
+
 # RETRIEVE POST
 @app.route('/getFeed', methods=['GET', 'POST'])
 def getFeedPost():
@@ -69,7 +71,7 @@ def registerUser():
     return "success"
 
 @app.route('/getUserInfo', methods=['GET', 'POST'])
-def registerUser():
+def getUserInfo():
     connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     data = request.json
