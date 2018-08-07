@@ -78,7 +78,7 @@ def getUserInfo():
     print(data)
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT 1 FROM users WHERE users.userid = %s"
+            sql = "SELECT 1 FROM users WHERE userid = %s"
             cursor.execute(sql, (data["userID"]))
             result = cursor.fetchall()
             print(result)
