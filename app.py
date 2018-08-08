@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import pymysql.cursors
 import pymysql
 import psycopg2
+import psycopg2.extras
 import sys
 import json
 import requests
@@ -42,17 +43,17 @@ def getUserPost():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
     try:
-        with connection.cursor() as cursor:
+        with connection.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
             sql = "SELECT * FROM post WHERE userID = '{userID}'".format(userID=data["userID"])
             cursor.execute(sql)
 
             result = cursor.fetchall()
-            print(jsonify(result))
+            print(result)
 
             connection.commit()
     finally:
         connection.close()
-    return jsonify(result)
+    return result
 
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
@@ -83,7 +84,7 @@ def getUserInfo():
             cursor.execute(sql, (data["userID"],))
             result = cursor.fetchone()
 
-            print(jsonify(result))
+            print(result)
 
             connection.commit()
     finally:
