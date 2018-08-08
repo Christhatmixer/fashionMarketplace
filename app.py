@@ -76,9 +76,10 @@ def getUserInfo():
     connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     data = request.json
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
     print(data)
     try:
-        with connection.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+        with dict_cur as cursor:
             sql = "SELECT * FROM users WHERE userid = %s"
             print(sql)
             cursor.execute(sql, (data["userID"],))
