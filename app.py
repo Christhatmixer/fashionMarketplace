@@ -77,11 +77,11 @@ def getUserInfo():
 
     data = request.json
     dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    print(data)
+    
     try:
         with dict_cur as cursor:
             sql = "SELECT * FROM users WHERE userid = %s"
-            print(sql)
+
             cursor.execute(sql, (data["userID"],))
             result = cursor.fetchone()
 
@@ -91,7 +91,7 @@ def getUserInfo():
     finally:
         connection.close()
 
-    return jsonify(result)
+    return result
 
 
 # EDIT AND ADD POST
