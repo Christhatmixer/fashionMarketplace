@@ -47,7 +47,7 @@ def getUserPost():
             cursor.execute(sql)
 
             result = cursor.fetchall()
-            print(result)
+            print(jsonify(result))
 
             connection.commit()
     finally:
@@ -81,9 +81,9 @@ def getUserInfo():
             sql = "SELECT * FROM users WHERE userid = %s"
             print(sql)
             cursor.execute(sql, (data["userID"],))
-            result = cursor.fetchall()
+            result = cursor.fetchone()
 
-            print(result)
+            print(jsonify(result))
 
             connection.commit()
     finally:
