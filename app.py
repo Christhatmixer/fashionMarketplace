@@ -78,7 +78,7 @@ def getUserInfo():
     data = request.json
     print(data)
     try:
-        with connection.cursor() as cursor:
+        with connection.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
             sql = "SELECT * FROM users WHERE userid = %s"
             print(sql)
             cursor.execute(sql, (data["userID"],))
