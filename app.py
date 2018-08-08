@@ -76,7 +76,7 @@ def getUserInfo():
     connection = psycopg2.connect(app.config["DATABASE_URL"])
 
     data = request.json
-    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     print(data)
     try:
         with dict_cur as cursor:
