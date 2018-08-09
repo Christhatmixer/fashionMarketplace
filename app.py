@@ -105,9 +105,8 @@ def newPost():
     data = request.json
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO post (name,description,category,userID,clothingID) VALUES ('{name}','{description}','{category}','{userID}','{clothingID}')".format(name=data["name"],description=data["description"],category=data["category"],
-                                                                                                                                                        userID=data["userID"],clothingID=data["clothingID"])
-            cursor.execute(sql)
+            sql = "INSERT INTO post (name,description,category,userID,clothingID) VALUES (%s,%s,%s,%s,%s)"
+            cursor.execute(sql, (data["name"], data["description"], data["category"], data["userID"], data["clothingID"]))
             print(sql)
             connection.commit()
     finally:
