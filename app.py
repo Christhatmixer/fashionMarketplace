@@ -26,10 +26,10 @@ def getFeedPost():
     dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         with dict_cur as cursor:
-            sql = "SELECT * FROM post INNER JOIN followings ON 'post.userID' = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
+            sql = "SELECT * FROM post INNER JOIN followings ON 'post.userID' = followings.followingID WHERE followings.userID = %s"
 
 
-            cursor.execute(sql)
+            cursor.execute(sql, (data["userID"], ))
 
             result = cursor.fetchall()
             print(result)
