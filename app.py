@@ -23,8 +23,9 @@ def getFeedPost():
     data = request.json
 
     connection = psycopg2.connect(app.config["DATABASE_URL"])
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        with connection.cursor() as cursor:
+        with dict_cur as cursor:
             sql = "SELECT * FROM post INNER JOIN followings ON 'post.userID' = followings.followingID WHERE followings.userID = '{userID}'".format(userID=data["userID"])
 
 
@@ -42,10 +43,11 @@ def getFeedPost():
 def getUserPost():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        with connection.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
-            sql = "SELECT * FROM post WHERE userID = '{userID}'".format(userID=data["userID"])
-            cursor.execute(sql)
+        with dict_cur as cursor:
+            sql = "SELECT * FROM post WHERE userID = %s"
+            cursor.execute(sql, (data["userID"], ))
 
             result = cursor.fetchall()
             print(result)
@@ -53,7 +55,7 @@ def getUserPost():
             connection.commit()
     finally:
         connection.close()
-    return result
+    return jsonify(result)
 
 @app.route('/registerUser', methods=['GET', 'POST'])
 def registerUser():
@@ -117,9 +119,9 @@ def newPost():
 def updatePost():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
-
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        with connection.cursor() as cursor:
+        with dict_cur as cursor:
             sql = "UPDATE post SET {key} = '{value}' WHERE clothingID = '{clothingID}'".format(key=data["key"], value=data["value"],clothingID=data["clothingID"])
             print(sql)
             cursor.execute(sql)
@@ -136,8 +138,9 @@ def updatePost():
 def searchUsers():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        with connection.cursor() as cursor:
+        with dict_cur as cursor:
             sql = "SELECT * FROM users WHERE userName LIKE '{query}%' LIMIT 10".format(query=data["query"])
             print(sql)
             cursor.execute(sql)
@@ -155,8 +158,9 @@ def searchUsers():
 def checkFollow():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
+    dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        with connection.cursor() as cursor:
+        with dict_cur as cursor:
             sql = "select 1 FROM followings WHERE userID = '{userID}' AND followingID = '{otherUserID}'".format(
                 userID=data["userID"], otherUserID=data["otherUserID"])
             print(sql)
