@@ -120,10 +120,10 @@ def updatePost():
     dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         with dict_cur as cursor:
-            sql = "UPDATE post SET %s = %s WHERE clothingid = %s"
+            sql = "UPDATE post SET {image} = %s WHERE clothingid = %s".format(image=data["key"])
             print(data["value"])
 
-            cursor.execute(sql, (data["key"],data["value"],data["clothingID"]))
+            cursor.execute(sql, (data["value"],data["clothingID"]))
 
             connection.commit()
     finally:
