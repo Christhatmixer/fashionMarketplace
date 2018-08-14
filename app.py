@@ -121,7 +121,8 @@ def updatePost():
     try:
         with dict_cur as cursor:
             sql = "UPDATE post SET %s = %s WHERE clothingid = %s"
-            print(sql)
+            print(data["value"])
+
             cursor.execute(sql, (data["key"],data["value"],data["clothingID"]))
 
             connection.commit()
