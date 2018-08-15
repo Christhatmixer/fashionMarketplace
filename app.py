@@ -171,7 +171,7 @@ def getFollowers():
     return jsonify(result)
 
 @app.route('/getFollowings', methods=['GET', 'POST'])
-def getFollowers():
+def getFollowings():
     data = request.json
     connection = psycopg2.connect(app.config["DATABASE_URL"])
     dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
